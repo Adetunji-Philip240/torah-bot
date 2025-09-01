@@ -1,4 +1,3 @@
-import React, { useState, useEffect } from "react";
 import { Heart, Play, Gauge, Clock, Award, Flame } from "lucide-react";
 
 const TorahMainContentGrid = () => {
