@@ -1,237 +1,179 @@
-import { Heart, Play, Gauge, Clock, Award, Flame } from "lucide-react";
+import { useMemo, memo } from "react";
+import {
+  BarChart,
+  Bar,
+  XAxis,
+  YAxis,
+  CartesianGrid,
+  Tooltip,
+  ResponsiveContainer,
+} from "recharts";
+import { Play, Star } from "lucide-react";
+import { useNavigate } from "react-router-dom";
 
-const TorahMainContentGrid = () => {
+// Sample topics (truncated for brevity)
+const sampleTopics = [
+  {
+    topicId: "mishnah_berachot",
+    title: "Mishnah Tractate Berachot",
+    summaryShort: "Comprehensive study of blessing laws and prayers.",
+    progressPercent: 67,
+    lessonsCompleted: 42,
+    lessonsTotal: 63,
+    timeSpentMinutes: 1240,
+    streakDays: 12,
+    weeklyMinutes: [
+      { week: "Week 35", minutes: 180 },
+      { week: "Week 36", minutes: 220 },
+      { week: "Week 37", minutes: 160 },
+      { week: "Week 38", minutes: 280 },
+    ],
+  },
+  {
+    topicId: "parashat_vayera",
+    title: "Parashat Vayera",
+    summaryShort:
+      "Abraham's hospitality, Sodom's destruction, and the Binding of Isaac.",
+    progressPercent: 85,
+    lessonsCompleted: 34,
+    lessonsTotal: 40,
+    timeSpentMinutes: 890,
+    streakDays: 8,
+    weeklyMinutes: [
+      { week: "Week 35", minutes: 200 },
+      { week: "Week 36", minutes: 240 },
+      { week: "Week 37", minutes: 190 },
+      { week: "Week 38", minutes: 260 },
+    ],
+  },
+];
+
+// Memoized Progress Component
+const ProgressOverview = memo(({ topic }) => {
+  const milestones = useMemo(() => {
+    const progress = topic.progressPercent;
+    if (progress < 33)
+      return {
+        beginner: "current",
+        intermediate: "locked",
+        advanced: "locked",
+      };
+    if (progress < 66)
+      return {
+        beginner: "completed",
+        intermediate: "current",
+        advanced: "locked",
+      };
+    return {
+      beginner: "completed",
+      intermediate: "completed",
+      advanced: "current",
+    };
+  }, [topic.progressPercent]);
+
   return (
-    <div>
-      <div className="mt-4 text-center">
-        <h2 className="text-3xl font-bold">Your Torah Learning Journey</h2>
-
-        <p>Choose a track to continue your spiritual growth</p>
-
-        <div className="lg:w-3/4 w-50 mx-auto">
-          <div className="flex flex-col sm:flex-row justify-between gap-4">
-            <div className="text-start flex">
-              <Gauge className="w-6 h-6 text-green-700 mx-4" /> 147 lessons
-              completed
-            </div>
-            <div className="text-end flex">
-              <Clock className="w-6 h-6 text-blue-700 mx-4" /> 42h 15m total
-              study time
-            </div>
-            <div className="text-end flex">
-              <Award className="w-6 h-6 text-yellow-700 mx-4" /> 23 badges
-              earned
-            </div>
-            <div className="text-end flex">
-              <Flame className="w-6 h-6 text-red-700 mx-4" /> Current streak: 23
-              days
-            </div>
-          </div>
+    <div className="mb-6">
+      <div className="flex items-center justify-between mb-4">
+        <div className="text-4xl font-bold">{topic.progressPercent}%</div>
+        <div className="text-sm text-gray-700">
+          {topic.lessonsCompleted} of {topic.lessonsTotal} lessons
         </div>
       </div>
-      <div className="bg-red-100 lg:w-3/4 w-50 p-5 border border-red-400 mx-auto mt-4 rounded-lg">
-        <div className="flex justify-between">
-          <h2 className="font-bold">Jewish Ethics & Mussar</h2>
-          <span className="bg-yellow-100 text-yellow-600 px-2 font-bold rounded">
-            Intermediate
-          </span>
-        </div>
-        <small className="mx-20">משנה</small>
-        <p>Character development through classical Mussar teachings </p>
-        <div className="mt-2 flex justify-between">
-          <p className="font-bold">Progress</p>
-          <p className="font-bold">5/12 lessons</p>
-        </div>
-        <div className="w-full mt-3 bg-gray-200 rounded-full h-4">
+
+      <div className="relative">
+        <div
+          className="w-full h-4 mb-4 bg-gray-200 rounded-full"
+          role="progressbar"
+        >
           <div
-            className="bg-red-600 h-4 rounded-full"
-            style={{ width: "42%" }}
-          ></div>
-        </div>
-        <div className="flex justify-between mt-2">
-          <p>42% complete</p>
-          <p>No streak</p>
+            className="h-4 transition-all duration-300 bg-[#B8860B] rounded-full"
+            style={{ width: `${topic.progressPercent}%` }}
+          />
         </div>
 
-        <div className="grid grid-cols-2 gap-4 mt-4">
-          <div>
-            <p>Current</p>
-            <p>Last studied</p>
-            <p>Time spent</p>
-            <p>Est. lesson time</p>
-          </div>
-          <div className="text-end">
-            <p className="font-bold">Humility & Pride</p>
-            <p>1 week agp</p>
-            <p>3h 18m</p>
-            <p className="text-blue-800">15-25 min</p>
-          </div>
-        </div>
-        <div className="flex w-full gap-2 mt-4">
-          {/* First button - 95% */}
-          <button className="flex items-center justify-center flex-[0.95] bg-red-600 text-white py-2 px-4 rounded">
-            <Play className="w-5 h-5 mr-2" /> Continue
-          </button>
-
-          {/* Second button - 5% */}
-          <button className="flex items-center justify-center flex-[0.05] bg-gray-200 text-gray-700 py-2 rounded">
-            <Heart className="w-5 h-5" />
-          </button>
+        <div className="flex items-center justify-between text-xs">
+          {["Beginner", "Intermediate", "Advanced"].map((level, index) => {
+            const states = ["beginner", "intermediate", "advanced"];
+            const status = milestones[states[index]];
+            return (
+              <div
+                key={level}
+                className={`flex items-center gap-1 ${
+                  status === "completed"
+                    ? "text-[#B8860B]"
+                    : status === "current"
+                    ? "text-gray-900"
+                    : "text-gray-400"
+                }`}
+              >
+                <div
+                  className={`w-3 h-3 rounded-full ${
+                    status === "completed"
+                      ? "bg-[#B8860B]"
+                      : status === "current"
+                      ? "bg-gray-900"
+                      : "bg-gray-300"
+                  }`}
+                />
+                {level}
+              </div>
+            );
+          })}
         </div>
       </div>
+    </div>
+  );
+});
 
-      <div className="bg-yellow-100 lg:w-3/4 w-50 p-5 border border-yellow-400 mx-auto mt-4 rounded-lg">
-        <div className="flex justify-between">
-          <h2 className="font-bold">Aggadic Stories</h2>
-          <span className="bg-green-100 text-green-600 px-2 font-bold rounded">
-            Beginner
-          </span>
-        </div>
-        <small className="mx-20">משנה</small>
-        <p>Timeless stores from Chazal with moral lessons</p>
-        <div className="mt-2 flex justify-between">
-          <p className="font-bold">Progress</p>
-          <p className="font-bold">5/25 lessons</p>
-        </div>
-        <div className="w-full mt-3 bg-gray-200 rounded-full h-4">
-          <div
-            className="bg-yellow-600 h-4 rounded-full"
-            style={{ width: "60%" }}
-          ></div>
-        </div>
-        <div className="flex justify-between mt-2">
-          <p>60% complete</p>
-          <p className="text-yellow-600">7 day streak 🔥</p>
-        </div>
+// Analytics Chart Component
+const WeeklyChart = memo(({ topic }) => (
+  <ResponsiveContainer width="100%" height={120}>
+    <BarChart data={topic.weeklyMinutes}>
+      <CartesianGrid strokeDasharray="3 3" />
+      <XAxis dataKey="week" />
+      <YAxis />
+      <Tooltip />
+      <Bar dataKey="minutes" fill="#B8860B" />
+    </BarChart>
+  </ResponsiveContainer>
+));
 
-        <div className="grid grid-cols-2 gap-4 mt-4">
-          <div>
-            <p>Current</p>
-            <p>Last studied</p>
-            <p>Time spent</p>
-            <p>Est. lesson time</p>
+// Main Grid Component
+const TorahMainContentGrid = () => {
+  const navigate = useNavigate();
+
+  return (
+    <div className="space-y-6">
+      {sampleTopics.map((topic) => (
+        <div
+          key={topic.topicId}
+          className="w-11/12 p-5 mx-auto bg-white border border-gray-300 rounded-lg lg:w-3/4"
+        >
+          <div className="flex justify-between mb-2">
+            <h2 className="text-lg font-bold">{topic.title}</h2>
+            <span className="px-2 font-bold text-white bg-[#B8860B] rounded">
+              Track
+            </span>
           </div>
-          <div className="text-end">
-            <p className="font-bold">Rabbi Akiva's Wisdom </p>
-            <p>4 days agp</p>
-            <p>5h 45m</p>
-            <p className="text-blue-800">10-15 min</p>
-          </div>
-        </div>
-        <div className="flex w-full gap-2 mt-4">
-          {/* First button - 95% */}
-          <button className="flex items-center justify-center flex-[0.95] bg-yellow-600 text-white py-2 px-4 rounded">
-            <Play className="w-5 h-5 mr-2" /> Continue
-          </button>
+          <p className="mb-3 text-gray-700">{topic.summaryShort}</p>
 
-          {/* Second button - 5% */}
-          <button className="flex items-center justify-center flex-[0.05] bg-gray-200 text-gray-700 py-2 rounded">
-            <Heart className="w-5 h-5" />
-          </button>
-        </div>
-      </div>
+          <ProgressOverview topic={topic} />
 
-      <div className="bg-blue-100 lg:w-3/4 w-50 p-5 border border-blue-400 mx-auto mt-4 rounded-lg">
-        <div className="flex justify-between">
-          <h2 className="font-bold">Jewish Holidays</h2>
-          <span className="bg-green-100 text-green-600 px-2 font-bold rounded">
-            Beginner
-          </span>
-        </div>
-        <small className="mx-20">משנה</small>
-        <p>Origins, laws, and spiritual meanings of Jewish holidays</p>
-        <div className="mt-2 flex justify-between">
-          <p className="font-bold">Progress</p>
-          <p className="font-bold">7/9 lessons</p>
-        </div>
-        <div className="w-full mt-3 bg-gray-200 rounded-full h-4">
-          <div
-            className="bg-blue-600 h-4 rounded-full"
-            style={{ width: "79%" }}
-          ></div>
-        </div>
-        <div className="flex justify-between mt-2">
-          <p>79% complete</p>
-          <p className="text-yellow-600">12 day streak 🔥</p>
-        </div>
+          <WeeklyChart topic={topic} />
 
-        <div className="grid grid-cols-2 gap-4 mt-4">
-          <div>
-            <p>Current</p>
-            <p>Last studied</p>
-            <p>Time spent</p>
-            <p>Est. lesson time</p>
-          </div>
-          <div className="text-end">
-            <p className="font-bold">Chanukah Preparation</p>
-            <p>1 day agp</p>
-            <p>4h 12m</p>
-            <p className="text-blue-800">12-18 min</p>
+          <div className="flex w-full gap-2 mt-4">
+            <button
+              onClick={() => navigate(`/topic/${topic.topicId}`)}
+              className="flex items-center justify-center flex-[0.95] bg-[#B8860B] text-white py-2 px-4 rounded"
+            >
+              <Play className="w-5 h-5 mr-2" /> Continue
+            </button>
+            <button className="flex items-center justify-center flex-[0.05] bg-gray-200 text-gray-700 py-2 rounded">
+              <Star className="w-5 h-5" />
+            </button>
           </div>
         </div>
-        <div className="flex w-full gap-2 mt-4">
-          {/* First button - 95% */}
-          <button className="flex items-center justify-center flex-[0.95] bg-blue-600 text-white py-2 px-4 rounded">
-            <Play className="w-5 h-5 mr-2" /> Continue
-          </button>
-
-          {/* Second button - 5% */}
-          <button className="flex items-center justify-center flex-[0.05] bg-gray-200 text-gray-700 py-2 rounded">
-            <Heart className="w-5 h-5" />
-          </button>
-        </div>
-      </div>
-
-      <div className="bg-green-100 lg:w-3/4 w-50 p-5 border border-green-400 mx-auto mt-4 rounded-lg">
-        <div className="flex justify-between">
-          <h2 className="font-bold">Biblical Figures</h2>
-          <span className="bg-yellow-100 text-yellow-600 px-2 font-bold rounded">
-            Intermediate
-          </span>
-        </div>
-        <small className="mx-20">משנה</small>
-        <p>Character studies of key Torah and Biblical personalities</p>
-        <div className="mt-2 flex justify-between">
-          <p className="font-bold">Progress</p>
-          <p className="font-bold">10/20 lessons</p>
-        </div>
-        <div className="w-full mt-3 bg-gray-200 rounded-full h-4">
-          <div
-            className="bg-green-600 h-4 rounded-full"
-            style={{ width: "50%" }}
-          ></div>
-        </div>
-        <div className="flex justify-between mt-2">
-          <p>50% complete</p>
-          <p className="text-blue-600">5 day streak</p>
-        </div>
-
-        <div className="grid grid-cols-2 gap-4 mt-4">
-          <div>
-            <p>Current</p>
-            <p>Last studied</p>
-            <p>Time spent</p>
-            <p>Est. lesson time</p>
-          </div>
-          <div className="text-end">
-            <p className="font-bold">King David's Leadership</p>
-            <p>5 days agp</p>
-            <p>7h 23m</p>
-            <p className="text-blue-800">15-20 min</p>
-          </div>
-        </div>
-        <div className="flex w-full gap-2 mt-4">
-          {/* First button - 95% */}
-          <button className="flex items-center justify-center flex-[0.95] bg-green-600 text-white py-2 px-4 rounded">
-            <Play className="w-5 h-5 mr-2" /> Continue
-          </button>
-
-          {/* Second button - 5% */}
-          <button className="flex items-center justify-center flex-[0.05] bg-gray-200 text-gray-700 py-2 rounded">
-            <Heart className="w-5 h-5" />
-          </button>
-        </div>
-      </div>
+      ))}
     </div>
   );
 };

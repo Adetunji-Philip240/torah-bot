@@ -39,8 +39,8 @@ const TorahDashboardHeader = () => {
 
   return (
     <div>
-      <div className="bg-gray-50 shadow relative z-20">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div className="relative z-20 shadow bg-gray-50">
+        <div className="px-4 mx-auto max-w-7xl sm:px-6 lg:px-8">
           <div className="flex items-center justify-between h-16">
             {/* Left: Logo + Sidebar Toggle */}
             <div className="flex items-center gap-3">
@@ -54,19 +54,19 @@ const TorahDashboardHeader = () => {
             </div>
 
             {/* Center: Search bar (desktop only) */}
-            <div className="hidden md:flex items-center flex-1 max-w-md mx-6">
+            <div className="items-center flex-1 hidden max-w-md mx-6 md:flex">
               <div className="relative w-full">
                 <Search className="absolute left-3 top-2.5 w-5 h-5 text-gray-400" />
                 <input
                   type="text"
                   placeholder="Search Torah content... / חיפוש"
-                  className="w-full pl-10 pr-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:outline-none"
+                  className="w-full py-2 pl-10 pr-4 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:outline-none"
                 />
               </div>
             </div>
 
             {/* Desktop Menu Bar */}
-            <div className="hidden md:flex space-x-6 font-medium text-gray-700 items-center">
+            <div className="items-center hidden space-x-6 font-medium text-gray-700 md:flex">
               <a
                 href="/"
                 className="flex items-center gap-1 hover:text-blue-600"
@@ -107,15 +107,15 @@ const TorahDashboardHeader = () => {
                   className="relative p-2 rounded-full hover:bg-gray-200"
                 >
                   <Bell className="w-6 h-6 text-gray-700" />
-                  <span className="absolute top-1 right-1 w-2 h-2 bg-red-500 rounded-full"></span>
+                  <span className="absolute w-2 h-2 bg-red-500 rounded-full top-1 right-1"></span>
                 </button>
 
                 {showNotif && (
-                  <div className="absolute right-0 mt-2 w-64 bg-white shadow-lg rounded-lg overflow-hidden">
-                    <div className="px-4 py-2 text-gray-800 font-semibold border-b">
+                  <div className="absolute right-0 w-64 mt-2 overflow-hidden bg-white rounded-lg shadow-lg">
+                    <div className="px-4 py-2 font-semibold text-gray-800 border-b">
                       Notifications
                     </div>
-                    <ul className="max-h-60 overflow-y-auto">
+                    <ul className="overflow-y-auto max-h-60">
                       <li className="px-4 py-2 hover:bg-gray-100">
                         🔔 New badge unlocked: Shabbat Scholar!
                         <br /> <span className="italic">2 hours ago</span>
@@ -138,7 +138,7 @@ const TorahDashboardHeader = () => {
               {/* Mobile Menu Button */}
               <button
                 onClick={() => setOpenMenu(!openMenu)}
-                className="ml-4 md:hidden p-2 rounded-md hover:bg-gray-200"
+                className="p-2 ml-4 rounded-md md:hidden hover:bg-gray-200"
               >
                 <Menu className="w-6 h-6 text-gray-700" />
               </button>
@@ -147,13 +147,13 @@ const TorahDashboardHeader = () => {
 
           {/* Mobile Menu */}
           {openMenu && (
-            <div className="md:hidden mt-2 space-y-2 px-2 pb-3">
+            <div className="px-2 pb-3 mt-2 space-y-2 md:hidden">
               <div className="relative w-full">
                 <Search className="absolute left-3 top-2.5 w-5 h-5 text-gray-400" />
                 <input
                   type="text"
                   placeholder="Search Torah content... / חיפוש"
-                  className="w-full pl-10 pr-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:outline-none"
+                  className="w-full py-2 pl-10 pr-4 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:outline-none"
                 />
               </div>
 
@@ -202,19 +202,19 @@ const TorahDashboardHeader = () => {
           ></div>
 
           {/* Sidebar content */}
-          <div className="relative w-65 bg-white shadow-lg p-6">
+          <div className="relative p-6 bg-white shadow-lg w-65">
             <button
               onClick={() => setOpenSidebar(false)}
-              className="absolute top-4 right-4 p-2 rounded-md hover:bg-gray-100"
+              className="absolute p-2 rounded-md top-4 right-4 hover:bg-gray-100"
             >
               <X className="w-6 h-6 text-gray-700" />
             </button>
-            <h2 className="text-lg font-bold mb-6 ">Study Hub</h2>
+            <h2 className="mb-6 text-lg font-bold ">Study Hub</h2>
             <div className="h-1 bg-gray-300 "></div>
 
             <div className="max-w-4xl mx-auto mt-10">
               {/* Buttons */}
-              <div className="flex space-x-4 border-b pb-2">
+              <div className="flex pb-2 space-x-4 border-b">
                 <button
                   onClick={() => setActiveTab("overview")}
                   className={`px-4 py-2 rounded-t-md ${
@@ -248,63 +248,63 @@ const TorahDashboardHeader = () => {
               </div>
 
               {/* Content */}
-              <div className="mt-6 p-4 border rounded-lg shadow-sm bg-white max-h-96 overflow-y-auto">
+              <div className="p-4 mt-6 overflow-y-auto bg-white border rounded-lg shadow-sm max-h-96">
                 {activeTab === "overview" && (
                   <div>
-                    <h2 className="text-xl font-bold mb-2">💡 Quick Actions</h2>
-                    <div className="text-center d-block mx-auto">
-                      <button className="flex bg-blue-600 py-2 text-white px-10 rounded">
+                    <h2 className="mb-2 text-xl font-bold">💡 Quick Actions</h2>
+                    <div className="mx-auto text-center d-block">
+                      <button className="flex px-10 py-2 text-white bg-blue-600 rounded">
                         <Play className="w-5 h-5 mx-2" />{" "}
                         <span>Resume Last Lesson</span>
                       </button>
-                      <button className="flex border border-gray-500 text-gray-500 py-2 text-white px-6 rounded mt-2">
+                      <button className="flex px-6 py-2 mt-2 text-gray-500 border border-gray-500 rounded">
                         <Bell className="w-5 h-5 mx-2" />{" "}
                         <span>Daily Reminder Settings</span>
                       </button>
                     </div>
 
-                    <h2 className="text-xl font-bold mb-2 mt-6 flex">
+                    <h2 className="flex mt-6 mb-2 text-xl font-bold">
                       📈 Today's Progress
                     </h2>
                     <div class="grid grid-cols-2 gap-4 text-center">
                       <div class="bg-blue-100 border border-blue-400 rounded-lg p-4 text-blue-800">
-                        <span className="font-bold text-2xl">23</span> <br />
+                        <span className="text-2xl font-bold">23</span> <br />
                         Day Streak
                       </div>
                       <div class="bg-green-100 border border-green-400 p-4 rounded-lg text-green-800">
-                        <span className="font-bold text-2xl">45m</span> <br />
+                        <span className="text-2xl font-bold">45m</span> <br />
                         Study Time
                       </div>
                     </div>
 
                     <div class="grid grid-cols-2 gap-4 text-center mt-3">
                       <div class="bg-purple-100 border border-purple-400 rounded-lg p-4 text-purple-800">
-                        <span className="font-bold text-2xl">3</span> <br />
+                        <span className="text-2xl font-bold">3</span> <br />
                         Lessons Done
                       </div>
                       <div class="bg-orange-100 border border-orange-400 p-4 rounded-lg text-orange-800">
-                        <span className="font-bold text-2xl">95%</span> <br />
+                        <span className="text-2xl font-bold">95%</span> <br />
                         Quiz Average
                       </div>
                     </div>
 
-                    <h2 className="text-xl font-bold mb-2 mt-6 flex">
+                    <h2 className="flex mt-6 mb-2 text-xl font-bold">
                       🧠 Recommended for You
                     </h2>
 
-                    <div className="bg-orange-100 p-5 border border-orange-300 rounded">
+                    <div className="p-5 bg-orange-100 border border-orange-300 rounded">
                       <p className="font-bold">Continue Daily Halacha</p>
                       <small>You're on a 23-day streak</small> <br />
                       <small>5 min</small>
                     </div>
 
-                    <div className="bg-purple-100 p-5 border border-purple-300 mt-3 rounded">
+                    <div className="p-5 mt-3 bg-purple-100 border border-purple-300 rounded">
                       <p className="font-bold">Explore Talmud Stories</p>
                       <small>Based on your Aggadah progress</small> <br />
                       <small>15 min</small>
                     </div>
 
-                    <div className="bg-blue-100 p-5 border border-blue-300 mt-3 rounded">
+                    <div className="p-5 mt-3 bg-blue-100 border border-blue-300 rounded">
                       <p className="font-bold">Review Mishnah Berachot</p>
                       <small>Speed repetition reminder</small> <br />
                       <small>10 min</small>
@@ -314,14 +314,14 @@ const TorahDashboardHeader = () => {
 
                 {activeTab === "badges" && (
                   <div>
-                    <h2 className="text-xl font-bold mb-2">🏅 Badges</h2>
+                    <h2 className="mb-2 text-xl font-bold">🏅 Badges</h2>
                     <p>You’ve unlocked 5 badges so far.</p>
                   </div>
                 )}
 
                 {activeTab === "calendar" && (
                   <div>
-                    <h2 className="text-xl font-bold mb-2">📅 Calendar</h2>
+                    <h2 className="mb-2 text-xl font-bold">📅 Calendar</h2>
                     <p>Check your learning schedule.</p>
                   </div>
                 )}
@@ -332,7 +332,7 @@ const TorahDashboardHeader = () => {
       )}
 
       {/* Quotes Section */}
-      <div className="text-center h-16 overflow-hidden bg-gray-100 py-5 text-sm relative">
+      <div className="relative h-16 py-5 overflow-hidden text-sm text-center bg-gray-100">
         {texts.map((text, index) => (
           <div
             key={index}
